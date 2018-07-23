@@ -1,0 +1,17 @@
+---
+# We need to start mongo without authentication or a keyfile enabled first,
+
+- name: Create the unauthenticated mongodb configuration file
+  template: src=mongod_unauthenticated.conf.j2 dest=/etc/mongod.conf mode=0777
+
+- name: Enable at boot and start mongodb
+  service: name=mongod enabled=yes state=started
+
+- name: Create the file to create the admin user
+  template: src=create_user.j2 dest=/tmp/create_user.js mode=0777
+
+- name: Create the admin user
+  shell: /usr/bin/mongo localhost:{{ mongod_port }}/admin /tmp/create_user.js
+  run_once: true
+  ignore_errors: true
+  mode: 0777

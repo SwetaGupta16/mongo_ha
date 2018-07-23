@@ -1,0 +1,11 @@
+
+---
+# This role deploys the mongod processes.
+- name: create data directory for mongodb data members
+  file: path={{ mongodb_datadir_prefix }}/db state=directory owner=mongod group=mongod mode=0777
+
+- name: create arbiter directory for mongodb arbiters
+  file: path={{ mongodb_datadir_prefix }}/arb state=directory owner=mongod group=mongod mode=0777
+
+- name: create log directory for mongodb
+  file: path=/var/log/mongodb state=directory owner=mongod group=mongod mode=0777
